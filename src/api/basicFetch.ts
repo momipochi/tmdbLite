@@ -1,4 +1,4 @@
-const key = import.meta.env.TMDB_API_KEY;
+const key = import.meta.env.VITE_TMDB_BEARER_TOKEN;
 
 export const basicFetch = async (
   method: "GET" | "POST",

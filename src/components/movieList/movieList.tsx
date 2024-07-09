@@ -9,12 +9,12 @@ export const MovieListing = ({
   movies: MovieList | undefined;
 }) => {
   return (
-    <div className={cn("grid-cols-2 grid gap-10 pl-52 pr-52")} {...props}>
+    <div className={cn("grid-cols-4 grid gap-2")} {...props}>
       {movies?.results.map((x, ind) => (
-        <Card key={ind} className={cn("w-[380px]")}>
-          <CardContent>
+        <Card key={ind} className={cn("w-[280px]")}>
+          <CardContent className={cn("flex items-center justify-center pt-8")}>
             <img
-              src={`https://media.themoviedb.org/t/p/w300_and_h450_bestv2${x.backdrop_path}`}
+              src={`https://media.themoviedb.org/t/p/w220_and_h330_face${x.poster_path}`}
               alt={`${x.title} image`}
             />
           </CardContent>
