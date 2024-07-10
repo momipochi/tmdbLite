@@ -103,8 +103,11 @@ export const DiscoverPagination = ({
           </PaginationItem>
         )}
         {currentPage !== 1 && (
-          <PaginationItem onClick={setPreviousPageHandler}>
-            <PaginationPrevious href="#" size="default" />
+          <PaginationItem
+            onClick={setPreviousPageHandler}
+            className={cn("cursor-default hover:cursor-pointer")}
+          >
+            <PaginationPrevious size="default" />
           </PaginationItem>
         )}
         {currentPage > 3 && (
@@ -128,8 +131,11 @@ export const DiscoverPagination = ({
           </PaginationItem>
         )}
         {currentPage < movies.total_pages && (
-          <PaginationItem onClick={setNextPageHandler}>
-            <PaginationNext href="#" size="default" />
+          <PaginationItem
+            onClick={setNextPageHandler}
+            className={cn("cursor-default hover:cursor-pointer")}
+          >
+            <PaginationNext size="default" />
           </PaginationItem>
         )}
         {currentPage !== movies.total_pages && (
