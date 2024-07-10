@@ -1,7 +1,8 @@
 import { createRootRoute, Link, Outlet } from "@tanstack/react-router";
 import { TanStackRouterDevtools } from "@tanstack/router-devtools";
-import { ThemeProvider } from "../components/theme-provider/theme-provider";
-import { ThemeSelect } from "../components/theme-provider/theme-select";
+import { ThemeProvider } from "@/components/theme/theme-provider";
+import { ThemeSelect } from "@/components/theme/theme-select";
+import { DropdownMenu } from "@radix-ui/react-dropdown-menu";
 
 export const Route = createRootRoute({
   component: () => (
@@ -14,6 +15,7 @@ export const Route = createRootRoute({
         <Link to="/about" className="[&.active]:font-bold">
           About
         </Link>
+        <DropdownMenu></DropdownMenu>
         <Link
           to="/discover/nowplaying"
           className="[&.active]:font-bold"
