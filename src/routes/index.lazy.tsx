@@ -1,13 +1,10 @@
 import { createLazyFileRoute } from "@tanstack/react-router";
-import { useState } from "react";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
 });
 
 function Index() {
-  const [,setPlans] = useState();
-
   return (
     <div className="p-2 flex-row items-start justify-start">
       <div className="p-2 flex items-start justify-start">
