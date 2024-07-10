@@ -21,6 +21,32 @@ export const Route = createFileRoute("/discover/nowplaying")({
   component: () => <NowPlaying />,
 });
 
+export type TogglePlanToWatchArgs = {
+  movie: Movie;
+  setPlanToWatchTrigger: (x: boolean) => void;
+  planToWatchTrigger: boolean;
+};
+export const togglePlanToWatch = async (arg: TogglePlanToWatchArgs) => {
+  const res = await db.planToWatches
+    .where("movie.id")
+    .equals(arg.movie.id)
+    .toArray();
+  console.log(res);
+  if (!res || res.length > 1) {
+    return;
+  }
+  if (res.length === 1) {
+    await db.planToWatches.delete(res[0].id);
+  } else {
+    await db.planToWatches.add({
+      watched: false,
+      dateAdded: new Date(),
+      personalRating: 0,
+      movie: arg.movie,
+    } as PlanToWatch);
+  }
+  arg.setPlanToWatchTrigger(!arg.planToWatchTrigger);
+};
 const NowPlaying = () => {
   const { page } = Route.useSearch();
   const [movies, setMovies] = useState<MovieList>();
@@ -30,27 +56,7 @@ const NowPlaying = () => {
     async () => ReduceToPTW(await db.planToWatches.toArray()),
     [planToWatchTrigger]
   );
-  const togglePlanToWatch = async (movie: Movie) => {
-    const res = await db.planToWatches
-      .where("movie.id")
-      .equals(movie.id)
-      .toArray();
-    console.log(res);
-    if (!res || res.length > 1) {
-      return;
-    }
-    if (res.length === 1) {
-      await db.planToWatches.delete(res[0].id);
-    } else {
-      await db.planToWatches.add({
-        watched: false,
-        dateAdded: new Date(),
-        personalRating: 0,
-        movie: movie,
-      } as PlanToWatch);
-    }
-    setPlanToWatchTrigger(!planToWatchTrigger);
-  };
+
   const setCurrentPage = (page: number) => {
     navigate({ search: () => ({ page }) });
   };
@@ -75,6 +81,8 @@ const NowPlaying = () => {
         movies={movies}
         planToWatches={planToWatches}
         togglePlanToWatch={togglePlanToWatch}
+        planToWatchTrigger={planToWatchTrigger}
+        setPlanToWatchTrigger={setPlanToWatchTrigger}
       ></MovieListing>
       <DiscoverPagination
         currentPage={page}
