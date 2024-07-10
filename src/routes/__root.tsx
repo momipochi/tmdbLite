@@ -27,7 +27,6 @@ export const Route = createRootRoute({
   component: () => (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <ThemeSelect />
-
       <div className="p-2 flex gap-2">
         <NavigationMenu>
           <NavigationMenuList>
