@@ -1,3 +1,4 @@
+import { cn } from "../../lib/utils";
 import { MovieList } from "../../types/movieList";
 import {
   Pagination,
@@ -38,7 +39,6 @@ export const DiscoverPagination = ({
       for (let i = 1; i <= movies.total_pages; i++) {
         res.push(
           <PaginationLink
-            href="#"
             size="default"
             isActive={currentPage === i}
             onClick={() => setCurrentPage(i)}
@@ -54,7 +54,6 @@ export const DiscoverPagination = ({
       for (let i = 1; i <= 5; i++) {
         res.push(
           <PaginationLink
-            href="#"
             size="default"
             isActive={currentPage === i}
             onClick={() => setCurrentPage(i)}
@@ -67,7 +66,6 @@ export const DiscoverPagination = ({
       for (let i = movies.total_pages - 4; i <= movies.total_pages; i++) {
         res.push(
           <PaginationLink
-            href="#"
             size="default"
             isActive={currentPage === i}
             onClick={() => setCurrentPage(i)}
@@ -80,7 +78,6 @@ export const DiscoverPagination = ({
       for (let i = currentPage - 2; i <= currentPage + 2; i++) {
         res.push(
           <PaginationLink
-            href="#"
             size="default"
             isActive={currentPage === i}
             onClick={() => setCurrentPage(i)}
@@ -94,12 +91,12 @@ export const DiscoverPagination = ({
   };
 
   return (
-    <Pagination {...props}>
+    <Pagination {...props} className="m-4">
       <PaginationContent>
         {currentPage > 2 && (
           <PaginationItem>
             <PaginationFirst
-              href="#"
+              className={cn("cursor-default hover:cursor-pointer")}
               size={"default"}
               onClick={() => setCurrentPage(1)}
             />
@@ -117,7 +114,12 @@ export const DiscoverPagination = ({
         )}
 
         {pagination()?.map((x, ind) => (
-          <PaginationItem key={ind}>{x}</PaginationItem>
+          <PaginationItem
+            className={cn("cursor-default hover:cursor-pointer")}
+            key={ind}
+          >
+            {x}
+          </PaginationItem>
         ))}
 
         {currentPage < movies.total_pages - 3 && (
@@ -131,9 +133,8 @@ export const DiscoverPagination = ({
           </PaginationItem>
         )}
         {currentPage !== movies.total_pages && (
-          <PaginationItem>
+          <PaginationItem className={cn("cursor-default hover:cursor-pointer")}>
             <PaginationLast
-              href="#"
               size={"default"}
               onClick={() => setCurrentPage(movies.total_pages)}
             />
