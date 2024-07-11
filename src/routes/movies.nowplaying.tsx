@@ -13,7 +13,7 @@ type NowPlayingSearchParam = {
   page: number;
 };
 
-export const Route = createFileRoute("/discover/nowplaying")({
+export const Route = createFileRoute("/movies/nowplaying")({
   validateSearch: (search: Record<string, unknown>): NowPlayingSearchParam => ({
     page: Number(search?.page ?? 1),
   }),

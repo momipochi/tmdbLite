@@ -3,7 +3,11 @@ import ReactDOM from "react-dom/client";
 import App from "./App.tsx";
 import "@/styles/globals.css";
 
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import {
+  CatchBoundary,
+  RouterProvider,
+  createRouter,
+} from "@tanstack/react-router";
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
@@ -20,7 +24,9 @@ declare module "@tanstack/react-router" {
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
-    <App />
+    <CatchBoundary getResetKey={() => "reset"} onCatch={(e) => console.log(e)}>
+      <RouterProvider router={router} />
+      <App />
+    </CatchBoundary>
   </React.StrictMode>
 );

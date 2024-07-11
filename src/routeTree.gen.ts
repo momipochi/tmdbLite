@@ -13,7 +13,8 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as DiscoverNowplayingImport } from './routes/discover.nowplaying'
+import { Route as TvshowsNowplayingImport } from './routes/tvshows.nowplaying'
+import { Route as MoviesNowplayingImport } from './routes/movies.nowplaying'
 
 // Create Virtual Routes
 
@@ -26,8 +27,13 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const DiscoverNowplayingRoute = DiscoverNowplayingImport.update({
-  path: '/discover/nowplaying',
+const TvshowsNowplayingRoute = TvshowsNowplayingImport.update({
+  path: '/tvshows/nowplaying',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MoviesNowplayingRoute = MoviesNowplayingImport.update({
+  path: '/movies/nowplaying',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -42,11 +48,18 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexLazyImport
       parentRoute: typeof rootRoute
     }
-    '/discover/nowplaying': {
-      id: '/discover/nowplaying'
-      path: '/discover/nowplaying'
-      fullPath: '/discover/nowplaying'
-      preLoaderRoute: typeof DiscoverNowplayingImport
+    '/movies/nowplaying': {
+      id: '/movies/nowplaying'
+      path: '/movies/nowplaying'
+      fullPath: '/movies/nowplaying'
+      preLoaderRoute: typeof MoviesNowplayingImport
+      parentRoute: typeof rootRoute
+    }
+    '/tvshows/nowplaying': {
+      id: '/tvshows/nowplaying'
+      path: '/tvshows/nowplaying'
+      fullPath: '/tvshows/nowplaying'
+      preLoaderRoute: typeof TvshowsNowplayingImport
       parentRoute: typeof rootRoute
     }
   }
@@ -56,7 +69,8 @@ declare module '@tanstack/react-router' {
 
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
-  DiscoverNowplayingRoute,
+  MoviesNowplayingRoute,
+  TvshowsNowplayingRoute,
 })
 
 /* prettier-ignore-end */
@@ -68,14 +82,18 @@ export const routeTree = rootRoute.addChildren({
       "filePath": "__root.tsx",
       "children": [
         "/",
-        "/discover/nowplaying"
+        "/movies/nowplaying",
+        "/tvshows/nowplaying"
       ]
     },
     "/": {
       "filePath": "index.lazy.tsx"
     },
-    "/discover/nowplaying": {
-      "filePath": "discover.nowplaying.tsx"
+    "/movies/nowplaying": {
+      "filePath": "movies.nowplaying.tsx"
+    },
+    "/tvshows/nowplaying": {
+      "filePath": "tvshows.nowplaying.tsx"
     }
   }
 }

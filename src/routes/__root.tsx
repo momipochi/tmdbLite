@@ -15,11 +15,19 @@ import {
 import { cn } from "@/lib/utils";
 import React from "react";
 
-const components = [
+const movieComponents = [
   {
     title: "Now Playing",
-    href: "/discover/nowplaying",
-    description: "Check out the what's in the theatre.",
+    href: "/movies/nowplaying",
+    description: "Check out the latests movies.",
+  },
+];
+
+const tvComponents = [
+  {
+    title: "Now Playing",
+    href: "/tvshows/nowplaying",
+    description: "Check out the latest tvshows.",
   },
 ];
 
@@ -39,10 +47,22 @@ export const Route = createRootRoute({
               </Link>
             </NavigationMenuItem>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Discover</NavigationMenuTrigger>
+              <NavigationMenuTrigger>Movies</NavigationMenuTrigger>
               <NavigationMenuContent>
                 <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                  {components.map((x) => (
+                  {movieComponents.map((x) => (
+                    <ListItem key={x.title} title={x.title} href={x.href}>
+                      {x.description}
+                    </ListItem>
+                  ))}
+                </ul>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>TVShows</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                  {tvComponents.map((x) => (
                     <ListItem key={x.title} title={x.title} href={x.href}>
                       {x.description}
                     </ListItem>
