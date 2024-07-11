@@ -24,6 +24,7 @@ export type MovieArchive = {
   id: number;
   bookmakred: boolean;
   watchlater: boolean;
+  watched: boolean;
   bookmarkDateAdded: Date;
   watchlaterDateAdded: Date;
   personalRating: number;

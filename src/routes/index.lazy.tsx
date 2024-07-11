@@ -1,4 +1,3 @@
-import { ReduceToPTW } from "@/components/custom/movieList";
 import { db } from "@/lib/indexedDB/db";
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
@@ -6,6 +5,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 import { SomeCard } from "@/components/custom/movieCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { MovieArchive } from "@/types/planToWtach";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
@@ -31,15 +31,25 @@ const StyledLink = ({
   );
 };
 
+export type PTW = {
+  [id: number]: MovieArchive | undefined;
+};
+
+export const ToPTW = (movieArchives: MovieArchive[] | undefined) => {
+  return movieArchives?.reduce((acc, curr) => {
+    acc[curr.movie.id] = curr;
+    return acc;
+  }, {} as PTW);
+};
 function Index() {
   const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
-  const planToWatches = useLiveQuery(
-    () => db.planToWatches.toArray(),
+  const movieArchives = useLiveQuery(
+    () => db.movieArchives.toArray(),
     [planToWatchTrigger]
   );
-
+  const ptw = ToPTW(movieArchives);
   const PlansToWatch = () => {
-    if (!planToWatches) {
+    if (!movieArchives) {
       return (
         <div className=" p-4 rounded-md border">
           <StyledLink
@@ -50,7 +60,7 @@ function Index() {
         </div>
       );
     }
-    if (planToWatches.length < 1) {
+    if (movieArchives.length < 1) {
       return (
         <div className=" p-4 rounded-md border">
           <StyledLink
@@ -64,7 +74,7 @@ function Index() {
     return (
       <ScrollArea className="p-4 whitespace-nowrap rounded-md border">
         <ul className={cn("flex w-max space-x-4 p-4")}>
-          {planToWatches?.map((x) => (
+          {movieArchives?.map((x) => (
             <figure key={x.id} className="shrink-0">
               <SomeCard
                 exists={ptw && ptw[x.movie.id] ? true : false}
@@ -81,7 +91,6 @@ function Index() {
       </ScrollArea>
     );
   };
-  const ptw = ReduceToPTW(planToWatches);
 
   return (
     <div className="p-2 flex-row items-start justify-start">

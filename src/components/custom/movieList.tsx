@@ -4,20 +4,7 @@ import { MdOutlineWatchLater, MdWatchLater } from "react-icons/md";
 import { Movie } from "@/types/movie";
 import { MovieList } from "@/types/movieList";
 import { TogglePlanToWatchArgs } from "@/routes/discover.nowplaying";
-import { PlanToWatch } from "@/types/planToWtach";
-
-type PTW = {
-  [id: number]: PlanToWatch | undefined;
-};
-
-export const ReduceToPTW = (
-  plans: PlanToWatch[] | undefined
-): PTW | undefined => {
-  return plans?.reduce((acc, curr) => {
-    acc[curr.movie.id] = curr;
-    return acc;
-  }, {} as PTW);
-};
+import { PTW } from "@/routes/index.lazy";
 
 const RenderPlanToWatch = ({
   exists,

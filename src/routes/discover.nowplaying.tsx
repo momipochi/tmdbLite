@@ -2,12 +2,13 @@ import { createFileRoute, useNavigate } from "@tanstack/react-router";
 import { useState, useEffect } from "react";
 import { getMovieList } from "../api/getMovieList";
 import { DiscoverPagination } from "../components/custom/discover-pagination";
-import { MovieListing, ReduceToPTW } from "../components/custom/movieList";
+import { MovieListing } from "../components/custom/movieList";
 import { MovieList } from "../types/movieList";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/indexedDB/db";
 import { Movie } from "@/types/movie";
-import { PlanToWatch } from "@/types/planToWtach";
+import { MovieArchive } from "@/types/planToWtach";
+import { ToPTW } from "./index.lazy";
 
 type NowPlayingSearchParam = {
   page: number;
@@ -27,23 +28,27 @@ export type TogglePlanToWatchArgs = {
   planToWatchTrigger: boolean;
 };
 export const togglePlanToWatch = async (arg: TogglePlanToWatchArgs) => {
-  const res = await db.planToWatches
+  const res = await db.movieArchives
     .where("movie.id")
     .equals(arg.movie.id)
     .toArray();
-  console.log(res);
+
   if (!res || res.length > 1) {
     return;
   }
   if (res.length === 1) {
-    await db.planToWatches.delete(res[0].id);
+    await db.movieArchives
+      .where("movie.id")
+      .equals(arg.movie.id)
+      .modify({ watchlater: false });
   } else {
-    await db.planToWatches.add({
+    await db.movieArchives.add({
+      watchlater: true,
+      watchlaterDateAdded: new Date(),
       watched: false,
-      dateAdded: new Date(),
       personalRating: 0,
       movie: arg.movie,
-    } as PlanToWatch);
+    } as MovieArchive);
   }
   arg.setPlanToWatchTrigger(!arg.planToWatchTrigger);
 };
@@ -52,8 +57,8 @@ const NowPlaying = () => {
   const [movies, setMovies] = useState<MovieList>();
   const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
   const navigate = useNavigate({ from: Route.fullPath });
-  const planToWatches = useLiveQuery(
-    async () => ReduceToPTW(await db.planToWatches.toArray()),
+  const movieArchives = useLiveQuery(
+    async () => ToPTW(await db.movieArchives.toArray()),
     [planToWatchTrigger]
   );
 
@@ -79,7 +84,7 @@ const NowPlaying = () => {
       />
       <MovieListing
         movies={movies}
-        planToWatches={planToWatches}
+        planToWatches={movieArchives}
         togglePlanToWatch={togglePlanToWatch}
         planToWatchTrigger={planToWatchTrigger}
         setPlanToWatchTrigger={setPlanToWatchTrigger}
