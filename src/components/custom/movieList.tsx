@@ -3,8 +3,8 @@ import { Card, CardContent, CardFooter } from "../ui/card";
 import { MdOutlineWatchLater, MdWatchLater } from "react-icons/md";
 import { Movie } from "@/types/movie";
 import { MovieList } from "@/types/movieList";
-import { PlanToWatch } from "@/types/planToWtach";
 import { TogglePlanToWatchArgs } from "@/routes/discover.nowplaying";
+import { PlanToWatch } from "@/types/planToWtach";
 
 type PTW = {
   [id: number]: PlanToWatch | undefined;

@@ -11,6 +11,26 @@ export const Route = createLazyFileRoute("/")({
   component: Index,
 });
 
+const StyledLink = ({
+  to,
+  search,
+  text,
+}: {
+  to: string;
+  search?: any;
+  text: string;
+}) => {
+  return (
+    <Link
+      to={to}
+      search={search}
+      className="rounded-md hover:cursor-pointer transition-all dark:scale-100 hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background disabled:pointer-events-none disabled:opacity-50 bg-background hover:bg-accent m-1 p-1 border-2"
+    >
+      {text}
+    </Link>
+  );
+};
+
 function Index() {
   const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
   const planToWatches = useLiveQuery(
@@ -22,26 +42,22 @@ function Index() {
     if (!planToWatches) {
       return (
         <div className=" p-4 rounded-md border">
-          <Link
+          <StyledLink
             to="/discover/nowplaying"
             search={{ page: 1 }}
-            className="rounded-md hover:cursor-pointer transition-all dark:scale-100 hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background disabled:pointer-events-none disabled:opacity-50 bg-background hover:bg-accent m-1 p-1 border-2"
-          >
-            Start discovering!
-          </Link>
+            text="Start discovering!"
+          />
         </div>
       );
     }
     if (planToWatches.length < 1) {
       return (
         <div className=" p-4 rounded-md border">
-          <Link
-            className="rounded-md hover:cursor-pointer transition-all dark:scale-100 hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-offset-background disabled:pointer-events-none disabled:opacity-50 bg-background hover:bg-accent m-1 p-1 border-2"
+          <StyledLink
             to="/discover/nowplaying"
             search={{ page: 1 }}
-          >
-            Start discovering!
-          </Link>
+            text="Start discovering!"
+          />
         </div>
       );
     }
@@ -70,8 +86,9 @@ function Index() {
   return (
     <div className="p-2 flex-row items-start justify-start">
       <div className="p-2 flex-row items-start justify-start mb-12">
-        <h1 className="text-left pb-8 w-full font-medium text-6xl">
-          Welcome to TMDBLite, a client-side only movie archiving website.
+        <h1 className="text-left pb-8 w-full font-medium text-5xl">
+          Welcome to TMDBLite, a personal movie and TV show tracker. Discover,
+          bookmark, and rate contents — all stored locally in the browser.
         </h1>
       </div>
       <div className="p-2 flex-row items-start justify-start mb-12">

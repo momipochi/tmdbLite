@@ -1,5 +1,5 @@
-import Dexie, { EntityTable } from "dexie";
 import { PlanToWatch } from "@/types/planToWtach";
+import Dexie, { EntityTable } from "dexie";
 
 const db = new Dexie("TMDBLiteDatabase") as Dexie & {
   planToWatches: EntityTable<PlanToWatch, "id">;
