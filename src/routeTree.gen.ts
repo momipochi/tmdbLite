@@ -13,7 +13,7 @@ import { createFileRoute } from '@tanstack/react-router'
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
-import { Route as TvshowsNowplayingImport } from './routes/tvshows.nowplaying'
+import { Route as TvshowsAiringtodayImport } from './routes/tvshows.airingtoday'
 import { Route as MoviesNowplayingImport } from './routes/movies.nowplaying'
 
 // Create Virtual Routes
@@ -27,8 +27,8 @@ const IndexLazyRoute = IndexLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() => import('./routes/index.lazy').then((d) => d.Route))
 
-const TvshowsNowplayingRoute = TvshowsNowplayingImport.update({
-  path: '/tvshows/nowplaying',
+const TvshowsAiringtodayRoute = TvshowsAiringtodayImport.update({
+  path: '/tvshows/airingtoday',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -55,11 +55,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MoviesNowplayingImport
       parentRoute: typeof rootRoute
     }
-    '/tvshows/nowplaying': {
-      id: '/tvshows/nowplaying'
-      path: '/tvshows/nowplaying'
-      fullPath: '/tvshows/nowplaying'
-      preLoaderRoute: typeof TvshowsNowplayingImport
+    '/tvshows/airingtoday': {
+      id: '/tvshows/airingtoday'
+      path: '/tvshows/airingtoday'
+      fullPath: '/tvshows/airingtoday'
+      preLoaderRoute: typeof TvshowsAiringtodayImport
       parentRoute: typeof rootRoute
     }
   }
@@ -70,7 +70,7 @@ declare module '@tanstack/react-router' {
 export const routeTree = rootRoute.addChildren({
   IndexLazyRoute,
   MoviesNowplayingRoute,
-  TvshowsNowplayingRoute,
+  TvshowsAiringtodayRoute,
 })
 
 /* prettier-ignore-end */
@@ -83,7 +83,7 @@ export const routeTree = rootRoute.addChildren({
       "children": [
         "/",
         "/movies/nowplaying",
-        "/tvshows/nowplaying"
+        "/tvshows/airingtoday"
       ]
     },
     "/": {
@@ -92,8 +92,8 @@ export const routeTree = rootRoute.addChildren({
     "/movies/nowplaying": {
       "filePath": "movies.nowplaying.tsx"
     },
-    "/tvshows/nowplaying": {
-      "filePath": "tvshows.nowplaying.tsx"
+    "/tvshows/airingtoday": {
+      "filePath": "tvshows.airingtoday.tsx"
     }
   }
 }

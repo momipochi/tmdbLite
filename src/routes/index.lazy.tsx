@@ -83,7 +83,7 @@ function Index() {
 
   return (
     <div className="p-2 flex-row items-start justify-start">
-      <div className="p-2 flex-row items-start justify-start mb-12">
+      <div className="p-2 flex-row items-start justify-start">
         <h1 className="text-left pb-8 w-full font-medium text-5xl">
           Welcome to TMDBLite, a personal movie and TV show tracker. Discover,
           bookmark, and rate contents — all stored locally in the browser.

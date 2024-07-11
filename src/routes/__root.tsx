@@ -25,8 +25,8 @@ const movieComponents = [
 
 const tvComponents = [
   {
-    title: "Now Playing",
-    href: "/tvshows/nowplaying",
+    title: "Airing Today",
+    href: "/tvshows/airingtoday",
     description: "Check out the latest tvshows.",
   },
 ];

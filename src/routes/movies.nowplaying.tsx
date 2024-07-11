@@ -8,13 +8,10 @@ import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/indexedDB/db";
 import { ToPTW } from "@/lib/utils";
 import { togglePlanToWatch } from "@/lib/indexedDB/functions";
-
-type NowPlayingSearchParam = {
-  page: number;
-};
+import { SearchParam } from "@/types/pagesearchparam";
 
 export const Route = createFileRoute("/movies/nowplaying")({
-  validateSearch: (search: Record<string, unknown>): NowPlayingSearchParam => ({
+  validateSearch: (search: Record<string, unknown>): SearchParam => ({
     page: Number(search?.page ?? 1),
   }),
 
