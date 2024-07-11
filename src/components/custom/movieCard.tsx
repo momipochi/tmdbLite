@@ -1,8 +1,8 @@
 import { cn } from "@/lib/utils";
-import { togglePlanToWatch } from "@/routes/discover.nowplaying";
 import { Movie } from "@/types/movie";
 import { MdWatchLater, MdOutlineWatchLater } from "react-icons/md";
 import { Card, CardContent, CardFooter } from "../ui/card";
+import { togglePlanToWatch } from "@/lib/indexedDB/functions";
 
 type TogglePlanToWatchArgs = {
   movie: Movie;
@@ -11,15 +11,15 @@ type TogglePlanToWatchArgs = {
 };
 
 const RenderPlanToWatch = ({
-  exists,
   arg,
+  hasPlan,
   togglePlanToWatch,
 }: {
-  exists: boolean;
+  hasPlan: boolean;
   arg: TogglePlanToWatchArgs;
   togglePlanToWatch: (arg: TogglePlanToWatchArgs) => void;
 }) => {
-  if (exists) {
+  if (hasPlan) {
     return (
       <MdWatchLater
         className={cn(
@@ -42,11 +42,12 @@ const RenderPlanToWatch = ({
 };
 
 type SomeProps = {
-  exists: boolean;
+  bookmark?: 1 | 0;
+  watchlater: 1 | 0;
   arg: TogglePlanToWatchArgs;
 };
 
-export const SomeCard = ({ arg, exists }: SomeProps) => {
+export const MovieCard = ({ arg, bookmark = 0, watchlater }: SomeProps) => {
   return (
     <Card key={arg.movie.id} className={cn("w-[230px] h-[430px]")}>
       <div className="flex justify-between">
@@ -56,7 +57,7 @@ export const SomeCard = ({ arg, exists }: SomeProps) => {
         </div>
         <div>
           <RenderPlanToWatch
-            exists={exists}
+            hasPlan={watchlater === 1 ? true : false}
             arg={arg}
             togglePlanToWatch={togglePlanToWatch}
           />

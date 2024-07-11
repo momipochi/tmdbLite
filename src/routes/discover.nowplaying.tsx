@@ -6,9 +6,8 @@ import { MovieListing } from "../components/custom/movieList";
 import { MovieList } from "../types/movieList";
 import { useLiveQuery } from "dexie-react-hooks";
 import { db } from "@/lib/indexedDB/db";
-import { Movie } from "@/types/movie";
-import { MovieArchive } from "@/types/planToWtach";
-import { ToPTW } from "./index.lazy";
+import { ToPTW } from "@/lib/utils";
+import { togglePlanToWatch } from "@/lib/indexedDB/functions";
 
 type NowPlayingSearchParam = {
   page: number;
@@ -22,36 +21,6 @@ export const Route = createFileRoute("/discover/nowplaying")({
   component: () => <NowPlaying />,
 });
 
-export type TogglePlanToWatchArgs = {
-  movie: Movie;
-  setPlanToWatchTrigger: (x: boolean) => void;
-  planToWatchTrigger: boolean;
-};
-export const togglePlanToWatch = async (arg: TogglePlanToWatchArgs) => {
-  const res = await db.movieArchives
-    .where("movie.id")
-    .equals(arg.movie.id)
-    .toArray();
-
-  if (!res || res.length > 1) {
-    return;
-  }
-  if (res.length === 1) {
-    await db.movieArchives
-      .where("movie.id")
-      .equals(arg.movie.id)
-      .modify({ watchlater: false });
-  } else {
-    await db.movieArchives.add({
-      watchlater: true,
-      watchlaterDateAdded: new Date(),
-      watched: false,
-      personalRating: 0,
-      movie: arg.movie,
-    } as MovieArchive);
-  }
-  arg.setPlanToWatchTrigger(!arg.planToWatchTrigger);
-};
 const NowPlaying = () => {
   const { page } = Route.useSearch();
   const [movies, setMovies] = useState<MovieList>();

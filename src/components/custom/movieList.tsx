@@ -1,10 +1,10 @@
-import { cn } from "../../lib/utils";
+import { cn, PTW } from "../../lib/utils";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { MdOutlineWatchLater, MdWatchLater } from "react-icons/md";
 import { Movie } from "@/types/movie";
 import { MovieList } from "@/types/movieList";
-import { TogglePlanToWatchArgs } from "@/routes/discover.nowplaying";
-import { PTW } from "@/routes/index.lazy";
+import { MovieCard } from "./movieCard";
+import { TogglePlanToWatchArgs } from "@/lib/indexedDB/functions";
 
 const RenderPlanToWatch = ({
   exists,
@@ -55,48 +55,6 @@ type MovieListingProps = {
   planToWatchTrigger: boolean;
   setPlanToWatchTrigger: (x: boolean) => void;
   togglePlanToWatch: (arg: TogglePlanToWatchArgs) => void;
-};
-
-export const MovieCard = ({
-  x,
-  exists,
-  planToWatchTrigger,
-  setPlanToWatchTrigger,
-  togglePlanToWatch,
-  ...props
-}: {
-  x: Movie;
-  exists: boolean;
-  planToWatchTrigger: boolean;
-  setPlanToWatchTrigger: (x: boolean) => void;
-  togglePlanToWatch: (x: TogglePlanToWatchArgs) => void;
-}) => {
-  <Card key={x.id} className={cn("w-[230px]")} {...props}>
-    <div className="flex justify-between">
-      <div>
-        {/* <CiBookmark size={35} />
-              <IoBookmark size={35} /> */}
-      </div>
-      <div>
-        <RenderPlanToWatch
-          exists={exists}
-          arg={{ movie: x, planToWatchTrigger, setPlanToWatchTrigger }}
-          togglePlanToWatch={togglePlanToWatch}
-        />
-      </div>
-    </div>
-    <CardContent className={cn("flex items-center justify-center pt-2")}>
-      <img
-        src={`https://media.themoviedb.org/t/p/w220_and_h330_face${
-          x.poster_path ? x.poster_path : x.backdrop_path
-        }`}
-        alt={`${x.title} image`}
-      />
-    </CardContent>
-    <CardFooter className={cn("flex-initial items-center justify-center")}>
-      <p>{x.title}</p>
-    </CardFooter>
-  </Card>;
 };
 
 export const MovieListingPrimitive = ({
@@ -158,35 +116,14 @@ export const MovieListing = ({
 }: MovieListingProps) => {
   return (
     <div className={cn("grid-cols-5 grid gap-2")} {...props}>
-      {movies?.results.map((x, ind) => (
-        <Card key={ind} className={cn("w-[230px]")}>
-          <div className="flex justify-between">
-            <div>
-              {/* <CiBookmark size={35} />
-              <IoBookmark size={35} /> */}
-            </div>
-            <div>
-              <RenderPlanToWatch
-                exists={planToWatches && planToWatches[x.id] ? true : false}
-                arg={{ movie: x, setPlanToWatchTrigger, planToWatchTrigger }}
-                togglePlanToWatch={togglePlanToWatch}
-              />
-            </div>
-          </div>
-          <CardContent className={cn("flex items-center justify-center pt-2")}>
-            <img
-              src={`https://media.themoviedb.org/t/p/w220_and_h330_face${
-                x.poster_path ? x.poster_path : x.backdrop_path
-              }`}
-              alt={`${x.title} image`}
-            />
-          </CardContent>
-          <CardFooter
-            className={cn("flex-initial items-center justify-center")}
-          >
-            <p>{x.title}</p>
-          </CardFooter>
-        </Card>
+      {movies?.results.map((x) => (
+        <MovieCard
+          key={x.id}
+          watchlater={
+            planToWatches && planToWatches[x.id]?.watchlater === 1 ? 1 : 0
+          }
+          arg={{ movie: x, setPlanToWatchTrigger, planToWatchTrigger }}
+        />
       ))}
     </div>
   );
