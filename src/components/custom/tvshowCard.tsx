@@ -9,4 +9,4 @@ export type ContentProp = {
   planToWatchTrigger: boolean;
 };
 
-export const TVShowCard = ({ content }: { content: TVShow | undefined }) => {};
+export const TVShowCard = ({}: { content: TVShow | undefined }) => {};
