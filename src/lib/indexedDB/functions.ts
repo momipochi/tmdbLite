@@ -1,6 +1,7 @@
 import { Movie } from "@/types/movie";
-import { MovieArchive } from "@/types/planToWtach";
+
 import { db } from "./db";
+import { MovieArchive } from "@/types/movieArchive";
 
 export const getWatchLaterMovieArchives = () => {
   return db.movieArchives.where("watchlater").equals(1).toArray();

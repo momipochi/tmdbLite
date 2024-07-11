@@ -47,7 +47,7 @@ type SomeProps = {
   arg: TogglePlanToWatchArgs;
 };
 
-export const MovieCard = ({ arg, bookmark = 0, watchlater }: SomeProps) => {
+export const MovieCard = ({ arg, watchlater }: SomeProps) => {
   return (
     <Card key={arg.movie.id} className={cn("w-[230px] h-[430px]")}>
       <div className="flex justify-between">

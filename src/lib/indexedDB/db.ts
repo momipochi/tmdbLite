@@ -1,4 +1,4 @@
-import { MovieArchive } from "@/types/planToWtach";
+import { MovieArchive } from "@/types/movieArchive";
 import Dexie, { EntityTable } from "dexie";
 
 const db = new Dexie("TMDBLiteDatabase") as Dexie & {
