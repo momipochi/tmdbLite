@@ -19,21 +19,24 @@ export const Route = createFileRoute("/tvshows/airingtoday")({
 const AiringToday = () => {
   const { page } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
-  const [ptw, setPtw] = useState(false);
   const setCurrentPage = (page: number) => {
     navigate({ search: () => ({ page }) });
   };
   const [shows, setShows] = useState<TVShowList>();
-  const tvarchives = useLiveQuery(async () =>
-    ToPTWTVShows(await db.tvshowArchives.toArray())
-  );
-
   useEffect(() => {
     const call = async () => {
       setShows(await getTVShowList(page));
     };
+
     call();
   }, [page]);
+
+  const [ptw, setPtw] = useState(false);
+
+  const tvarchives = useLiveQuery(async () =>
+    ToPTWTVShows(await db.tvshowArchives.toArray())
+  );
+
   if (!shows) {
     return <></>;
   }

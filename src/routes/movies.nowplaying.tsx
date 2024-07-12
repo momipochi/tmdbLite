@@ -20,17 +20,12 @@ export const Route = createFileRoute("/movies/nowplaying")({
 
 const NowPlaying = () => {
   const { page } = Route.useSearch();
-  const [movies, setMovies] = useState<MovieList>();
-  const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
   const navigate = useNavigate({ from: Route.fullPath });
-  const movieArchives = useLiveQuery(
-    async () => ToPTW(await db.movieArchives.toArray()),
-    [planToWatchTrigger]
-  );
-
   const setCurrentPage = (page: number) => {
     navigate({ search: () => ({ page }) });
   };
+  const [movies, setMovies] = useState<MovieList>();
+
   useEffect(() => {
     const tmp = async () => {
       setMovies(await getMovieList(page));
@@ -38,6 +33,12 @@ const NowPlaying = () => {
     tmp();
   }, [page]);
 
+  const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
+
+  const movieArchives = useLiveQuery(
+    async () => ToPTW(await db.movieArchives.toArray()),
+    [planToWatchTrigger]
+  );
   if (!movies) {
     return <div>Loading...</div>;
   }

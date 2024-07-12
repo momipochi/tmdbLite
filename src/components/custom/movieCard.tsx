@@ -65,6 +65,7 @@ export const MovieCard = ({ arg, watchlater }: SomeProps) => {
       </div>
       <CardContent className={cn("flex items-center justify-center pt-2")}>
         <img
+          loading="lazy"
           src={`https://media.themoviedb.org/t/p/w220_and_h330_face${
             arg.movie.poster_path
               ? arg.movie.poster_path
