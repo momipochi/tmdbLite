@@ -122,7 +122,7 @@ export const DiscoverPagination = ({
           </PaginationItem>
         ))}
 
-        {currentPage < totalPages - 3 && (
+        {currentPage < totalPages - 2 && (
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
