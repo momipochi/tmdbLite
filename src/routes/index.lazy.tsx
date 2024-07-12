@@ -1,10 +1,15 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
 import { useLiveQuery } from "dexie-react-hooks";
 import { useState } from "react";
-import { cn, ToPTW } from "@/lib/utils";
-import { MovieCard } from "@/components/custom/movieCard";
+import { cn, ToPTW, ToPTWTVShows } from "@/lib/utils";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { getWatchLaterMovieArchives } from "@/lib/indexedDB/functions";
+import {
+  getWatchLaterMovieArchives,
+  getWatchLaterTVArchives,
+} from "@/lib/indexedDB/functions";
+import { MovieCard } from "@/components/custom/movieCard";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { TVShowCard } from "@/components/custom/tvshowCard";
 
 export const Route = createLazyFileRoute("/")({
   component: Index,
@@ -32,11 +37,17 @@ const StyledLink = ({
 
 function Index() {
   const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
+  const [planToWatchTriggerTV, setPlanToWatchTriggerTV] = useState(false);
   const movieArchives = useLiveQuery(
     async () => await getWatchLaterMovieArchives(),
     [planToWatchTrigger]
   );
+  const tvArchives = useLiveQuery(
+    async () => await getWatchLaterTVArchives(),
+    [planToWatchTriggerTV]
+  );
   const ptw = ToPTW(movieArchives);
+  const ptwTV = ToPTWTVShows(tvArchives);
   const PlansToWatch = () => {
     if (!movieArchives) {
       return (
@@ -61,23 +72,54 @@ function Index() {
       );
     }
     return (
-      <ScrollArea className="p-4 whitespace-nowrap rounded-md border">
-        <ul className={cn("flex w-max space-x-4 p-4")}>
-          {movieArchives?.map((x) => (
-            <figure key={x.id} className="shrink-0">
-              <MovieCard
-                watchlater={ptw && ptw[x.movie.id]?.watchlater === 1 ? 1 : 0}
-                arg={{
-                  movie: x.movie,
-                  setPlanToWatchTrigger,
-                  planToWatchTrigger,
-                }}
-              />
-            </figure>
-          ))}
-        </ul>
-        <ScrollBar orientation="horizontal" />
-      </ScrollArea>
+      <div>
+        <Tabs defaultValue="movies" className="wf">
+          <div className="flex mb-2">
+            <TabsList>
+              <TabsTrigger value="movies">Movies</TabsTrigger>
+              <TabsTrigger value="shows">Shows</TabsTrigger>
+            </TabsList>
+          </div>
+          <ScrollArea className="p-4 whitespace-nowrap rounded-md border h-[550px]">
+            <TabsContent value="movies">
+              <ul className={cn("flex w-max space-x-4 p-4 ")}>
+                {movieArchives?.map((x) => (
+                  <figure key={x.id} className="shrink-0">
+                    <MovieCard
+                      watchlater={
+                        ptw && ptw[x.movie.id]?.watchlater === 1 ? 1 : 0
+                      }
+                      arg={{
+                        movie: x.movie,
+                        setPlanToWatchTrigger,
+                        planToWatchTrigger,
+                      }}
+                    />
+                  </figure>
+                ))}
+              </ul>
+            </TabsContent>
+            <TabsContent value="shows">
+              <ul className={cn("flex w-max space-x-4 p-4 ")}>
+                {tvArchives?.map((x) => (
+                  <figure key={x.id} className="shrink-0">
+                    <TVShowCard
+                      watchlater={
+                        ptwTV && ptwTV[x.tvshow.id]?.watchlater === 1 ? 1 : 0
+                      }
+                      tvshow={x.tvshow}
+                      setPlanToWatchTrigger={setPlanToWatchTriggerTV}
+                      planToWatchTrigger={planToWatchTriggerTV}
+                    />
+                  </figure>
+                ))}
+              </ul>
+            </TabsContent>
+
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </Tabs>
+      </div>
     );
   };
 
@@ -90,7 +132,7 @@ function Index() {
         </h1>
       </div>
       <div className="p-2 flex-row items-start justify-start mb-12">
-        <h2 className="text-left pb-8 w-full font-medium text-lg">
+        <h2 className="text-left pb-2 w-full font-medium text-lg">
           Planning to watch
         </h2>
         <PlansToWatch />

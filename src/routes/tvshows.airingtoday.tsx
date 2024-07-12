@@ -47,6 +47,7 @@ const AiringToday = () => {
       <div className={cn("grid-cols-5 grid gap-2")}>
         {shows?.results.map((x) => (
           <TVShowCard
+            key={x.id}
             tvshow={x}
             watchlater={
               tvarchives && tvarchives[x.id]?.watchlater === 1 ? 1 : 0

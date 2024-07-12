@@ -8,6 +8,9 @@ import { TVShowArchive } from "@/types/tvShowArchive";
 export const getWatchLaterMovieArchives = () => {
   return db.movieArchives.where("watchlater").equals(1).toArray();
 };
+export const getWatchLaterTVArchives = () => {
+  return db.tvshowArchives.where("watchlater").equals(1).toArray();
+};
 
 export type TogglePlanToWatchArgs = {
   movie: Movie;
