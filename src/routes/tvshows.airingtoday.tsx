@@ -1,10 +1,12 @@
 import { getTVShowList } from "@/api/getTVShowList";
 import { DiscoverPagination } from "@/components/custom/discover-pagination";
 import { TVShowCard } from "@/components/custom/tvshowCard";
-import { cn } from "@/lib/utils";
+import { db } from "@/lib/indexedDB/db";
+import { cn, ToPTWTVShows } from "@/lib/utils";
 import { SearchParam } from "@/types/pagesearchparam";
 import { TVShowList } from "@/types/tvshowlist";
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
+import { useLiveQuery } from "dexie-react-hooks";
 import { useEffect, useState } from "react";
 
 export const Route = createFileRoute("/tvshows/airingtoday")({
@@ -17,10 +19,15 @@ export const Route = createFileRoute("/tvshows/airingtoday")({
 const AiringToday = () => {
   const { page } = Route.useSearch();
   const navigate = useNavigate({ from: Route.fullPath });
+  const [ptw, setPtw] = useState(false);
   const setCurrentPage = (page: number) => {
     navigate({ search: () => ({ page }) });
   };
   const [shows, setShows] = useState<TVShowList>();
+  const tvarchives = useLiveQuery(async () =>
+    ToPTWTVShows(await db.tvshowArchives.toArray())
+  );
+
   useEffect(() => {
     const call = async () => {
       setShows(await getTVShowList(page));
@@ -41,10 +48,12 @@ const AiringToday = () => {
         {shows?.results.map((x) => (
           <TVShowCard
             tvshow={x}
-            watchlater={1}
-            setPlanToWatchTrigger={() => {}}
-            planToWatchTrigger={false}
-          ></TVShowCard>
+            watchlater={
+              tvarchives && tvarchives[x.id]?.watchlater === 1 ? 1 : 0
+            }
+            setPlanToWatchTrigger={setPtw}
+            planToWatchTrigger={ptw}
+          />
         ))}
       </div>
       <DiscoverPagination

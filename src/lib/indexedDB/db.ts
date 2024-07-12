@@ -1,8 +1,10 @@
 import { MovieArchive } from "@/types/movieArchive";
+import { TVShowArchive } from "@/types/tvShowArchive";
 import Dexie, { EntityTable } from "dexie";
 
 const db = new Dexie("TMDBLiteDatabase") as Dexie & {
   movieArchives: EntityTable<MovieArchive, "id">;
+  tvshowArchives: EntityTable<TVShowArchive, "id">;
 };
 
 db.version(1).stores({
