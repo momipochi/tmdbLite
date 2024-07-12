@@ -10,16 +10,7 @@ export type TVShowCardProp = {
   planToWatchTrigger: boolean;
 };
 
-const RenderPlanTowatch = () => {
-  return <div></div>;
-};
-
-export const TVShowCard = ({
-  watchlater,
-  tvshow,
-  setPlanToWatchTrigger,
-  planToWatchTrigger,
-}: TVShowCardProp) => {
+export const TVShowCard = ({ tvshow }: TVShowCardProp) => {
   return (
     <Card key={tvshow.id} className={cn("w-[230px] h-[430px]")}>
       <div className="flex justify-between">
