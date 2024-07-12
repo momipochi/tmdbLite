@@ -1,5 +1,4 @@
 import { cn } from "../../lib/utils";
-import { MovieList } from "../../types/movieList";
 import {
   Pagination,
   PaginationContent,
@@ -15,17 +14,17 @@ import {
 export type DiscoverPaginationProps = {
   currentPage: number;
   setCurrentPage: (num: number) => void;
-  movies: MovieList;
+  totalPages: number;
 };
 
 export const DiscoverPagination = ({
   currentPage,
-  movies,
+  totalPages,
   setCurrentPage,
   ...props
 }: DiscoverPaginationProps) => {
   const setNextPageHandler = () => {
-    if (currentPage === movies?.total_pages) return;
+    if (currentPage === totalPages) return;
     setCurrentPage(currentPage + 1);
   };
   const setPreviousPageHandler = () => {
@@ -33,10 +32,9 @@ export const DiscoverPagination = ({
     setCurrentPage(currentPage - 1);
   };
   const pagination = () => {
-    if (!movies) return;
-    if (!(movies.total_pages > 5)) {
+    if (!(totalPages > 5)) {
       const res = [];
-      for (let i = 1; i <= movies.total_pages; i++) {
+      for (let i = 1; i <= totalPages; i++) {
         res.push(
           <PaginationLink
             size="default"
@@ -62,8 +60,8 @@ export const DiscoverPagination = ({
           </PaginationLink>
         );
       }
-    } else if (currentPage >= movies.total_pages - 2) {
-      for (let i = movies.total_pages - 4; i <= movies.total_pages; i++) {
+    } else if (currentPage >= totalPages - 2) {
+      for (let i = totalPages - 4; i <= totalPages; i++) {
         res.push(
           <PaginationLink
             size="default"
@@ -89,7 +87,6 @@ export const DiscoverPagination = ({
     }
     return res;
   };
-
   return (
     <Pagination {...props} className="m-4">
       <PaginationContent>
@@ -125,12 +122,12 @@ export const DiscoverPagination = ({
           </PaginationItem>
         ))}
 
-        {currentPage < movies.total_pages - 3 && (
+        {currentPage < totalPages - 3 && (
           <PaginationItem>
             <PaginationEllipsis />
           </PaginationItem>
         )}
-        {currentPage < movies.total_pages && (
+        {currentPage < totalPages && (
           <PaginationItem
             onClick={setNextPageHandler}
             className={cn("cursor-default hover:cursor-pointer")}
@@ -138,11 +135,11 @@ export const DiscoverPagination = ({
             <PaginationNext size="default" />
           </PaginationItem>
         )}
-        {currentPage !== movies.total_pages && (
+        {currentPage !== totalPages && (
           <PaginationItem className={cn("cursor-default hover:cursor-pointer")}>
             <PaginationLast
               size={"default"}
-              onClick={() => setCurrentPage(movies.total_pages)}
+              onClick={() => setCurrentPage(totalPages)}
             />
           </PaginationItem>
         )}

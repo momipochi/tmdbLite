@@ -46,7 +46,7 @@ const NowPlaying = () => {
       <DiscoverPagination
         currentPage={page}
         setCurrentPage={setCurrentPage}
-        movies={movies}
+        totalPages={movies.total_pages}
       />
       <MovieListing
         movies={movies}
@@ -58,7 +58,7 @@ const NowPlaying = () => {
       <DiscoverPagination
         currentPage={page}
         setCurrentPage={setCurrentPage}
-        movies={movies}
+        totalPages={movies.total_pages}
       />
     </>
   );
