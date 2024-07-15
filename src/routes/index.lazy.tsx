@@ -46,6 +46,8 @@ const PlansToWatch = ({
   planToWatchTrigger,
   setPlanToWatchTriggerTV,
   planToWatchTriggerTV,
+  setBookmarkTV,
+  bookmarkTriggerTV,
 }: {
   movieArchives: MovieArchive[] | undefined;
   ptw: PTW | undefined;
@@ -55,6 +57,8 @@ const PlansToWatch = ({
   planToWatchTrigger: boolean;
   setPlanToWatchTriggerTV: (x: boolean) => void;
   planToWatchTriggerTV: boolean;
+  setBookmarkTV: (x: boolean) => void;
+  bookmarkTriggerTV: boolean;
 }) => {
   return (
     <div className="justify-start content-center">
@@ -112,9 +116,14 @@ const PlansToWatch = ({
                       watchlater={
                         ptwTV && ptwTV[x.tvshow.id]?.watchlater === 1 ? 1 : 0
                       }
+                      bookmark={
+                        ptwTV && ptwTV[x.tvshow.id]?.bookmakred === 1 ? 1 : 0
+                      }
                       tvshow={x.tvshow}
                       setPlanToWatchTrigger={setPlanToWatchTriggerTV}
                       planToWatchTrigger={planToWatchTriggerTV}
+                      setBookmarkTrigger={setBookmarkTV}
+                      bookmarkTrigger={bookmarkTriggerTV}
                     />
                   </figure>
                 ))
@@ -131,13 +140,14 @@ const PlansToWatch = ({
 function Index() {
   const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
   const [planToWatchTriggerTV, setPlanToWatchTriggerTV] = useState(false);
+  const [bmrkTriggerTV, setBmrkTriggerTV] = useState(false);
   const movieArchives = useLiveQuery(
     async () => await getWatchLaterMovieArchives(),
     [planToWatchTrigger]
   );
   const tvArchives = useLiveQuery(
     async () => await getWatchLaterTVArchives(),
-    [planToWatchTriggerTV]
+    [planToWatchTriggerTV, bmrkTriggerTV]
   );
   const ptw = ToPTW(movieArchives);
   const ptwTV = ToPTWTVShows(tvArchives);
@@ -163,6 +173,8 @@ function Index() {
           setPlanToWatchTriggerTV={setPlanToWatchTriggerTV}
           planToWatchTrigger={planToWatchTrigger}
           planToWatchTriggerTV={planToWatchTriggerTV}
+          setBookmarkTV={setBmrkTriggerTV}
+          bookmarkTriggerTV={bmrkTriggerTV}
         />
       </div>
     </div>

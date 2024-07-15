@@ -32,11 +32,12 @@ const AiringToday = () => {
   }, [page]);
 
   const [ptw, setPtw] = useState(false);
+  const [bmrk, setBmrk] = useState(false);
 
-  const tvarchives = useLiveQuery(async () =>
-    ToPTWTVShows(await db.tvshowArchives.toArray())
+  const tvarchives = useLiveQuery(
+    async () => ToPTWTVShows(await db.tvshowArchives.toArray()),
+    [ptw, bmrk]
   );
-
   if (!shows) {
     return <></>;
   }
@@ -55,8 +56,11 @@ const AiringToday = () => {
             watchlater={
               tvarchives && tvarchives[x.id]?.watchlater === 1 ? 1 : 0
             }
+            bookmark={tvarchives && tvarchives[x.id]?.bookmakred === 1 ? 1 : 0}
             setPlanToWatchTrigger={setPtw}
             planToWatchTrigger={ptw}
+            setBookmarkTrigger={setBmrk}
+            bookmarkTrigger={bmrk}
           />
         ))}
       </div>

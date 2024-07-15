@@ -85,4 +85,42 @@ export const togglePlanToWatchTV = async (arg: TogglePlanToWatchTVArgs) => {
       tvshow: arg.tv,
     } as TVShowArchive);
   }
+  arg.setPlanToWatchTrigger(!arg.planToWatchTrigger);
+};
+
+export type ToggleBookmarkTVArgs = {
+  tv: TVShow;
+  setBookmarkTrigger: (x: boolean) => void;
+  bookmarkTrigger: boolean;
+};
+export const toggleBookmarkTV = async (arg: ToggleBookmarkTVArgs) => {
+  const res = await db.tvshowArchives
+    .where("tvshow.id")
+    .equals(arg.tv.id)
+    .toArray();
+  if (!res || res.length > 1) {
+    return;
+  }
+  if (res.length === 1) {
+    if (res[0].bookmakred === 1) {
+      await db.tvshowArchives
+        .where("tvshow.id")
+        .equals(arg.tv.id)
+        .modify({ bookmakred: 0 });
+    } else {
+      await db.tvshowArchives
+        .where("tvshow.id")
+        .equals(arg.tv.id)
+        .modify({ bookmakred: 1 });
+    }
+  } else {
+    await db.tvshowArchives.add({
+      bookmakred: 1,
+      bookmarkDateAdded: new Date(),
+      watched: 0,
+      personalRating: 0,
+      tvshow: arg.tv,
+    } as TVShowArchive);
+  }
+  arg.setBookmarkTrigger(!arg.bookmarkTrigger);
 };
