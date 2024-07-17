@@ -108,6 +108,7 @@ export const TVShowCard = ({
     <Card key={tvshow.id} className={cn("w-[230px] h-[430px]")}>
       <CardContent className={cn("flex items-center justify-center pt-2")}>
         <img
+          loading="lazy"
           src={`https://media.themoviedb.org/t/p/w220_and_h330_face${
             tvshow.poster_path ? tvshow.poster_path : tvshow.backdrop_path
           }`}

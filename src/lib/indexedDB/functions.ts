@@ -50,6 +50,44 @@ export const togglePlanToWatch = async (arg: TogglePlanToWatchArgs) => {
   arg.setPlanToWatchTrigger(!arg.planToWatchTrigger);
 };
 
+export type ToggleBookmarkArgs = {
+  movie: Movie;
+  setBookmarkTrigger: (x: boolean) => void;
+  bookmarkTrigger: boolean;
+};
+
+export const toggleBookmark = async (arg: ToggleBookmarkArgs) => {
+  const res = await db.movieArchives
+    .where("movie.id")
+    .equals(arg.movie.id)
+    .toArray();
+  if (!res || res.length > 1) {
+    return;
+  }
+  if (res.length === 1) {
+    if (res[0].bookmakred === 1) {
+      await db.movieArchives
+        .where("movie.id")
+        .equals(arg.movie.id)
+        .modify({ bookmakred: 0 });
+    } else {
+      await db.movieArchives
+        .where("movie.id")
+        .equals(arg.movie.id)
+        .modify({ bookmakred: 1 });
+    }
+  } else {
+    await db.movieArchives.add({
+      bookmakred: 1,
+      bookmarkDateAdded: new Date(),
+      watched: 0,
+      personalRating: 0,
+      movie: arg.movie,
+    } as MovieArchive);
+  }
+  arg.setBookmarkTrigger(!arg.bookmarkTrigger);
+};
+
 export type TogglePlanToWatchTVArgs = {
   tv: TVShow;
   setPlanToWatchTrigger: (x: boolean) => void;

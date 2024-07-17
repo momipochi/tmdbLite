@@ -48,6 +48,8 @@ const PlansToWatch = ({
   planToWatchTriggerTV,
   setBookmarkTV,
   bookmarkTriggerTV,
+  setBookmark,
+  bookmarkTrigger,
 }: {
   movieArchives: MovieArchive[] | undefined;
   ptw: PTW | undefined;
@@ -59,6 +61,8 @@ const PlansToWatch = ({
   planToWatchTriggerTV: boolean;
   setBookmarkTV: (x: boolean) => void;
   bookmarkTriggerTV: boolean;
+  setBookmark: (x: boolean) => void;
+  bookmarkTrigger: boolean;
 }) => {
   return (
     <div className="justify-start content-center">
@@ -88,10 +92,13 @@ const PlansToWatch = ({
                       watchlater={
                         ptw && ptw[x.movie.id]?.watchlater === 1 ? 1 : 0
                       }
+                      bookmark={ptw && ptw[x.id]?.bookmakred === 1 ? 1 : 0}
                       arg={{
                         movie: x.movie,
                         setPlanToWatchTrigger,
                         planToWatchTrigger,
+                        setBookmarkTrigger: setBookmark,
+                        bookmarkTrigger: bookmarkTrigger,
                       }}
                     />
                   </figure>
@@ -139,6 +146,7 @@ const PlansToWatch = ({
 };
 function Index() {
   const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
+  const [bookmarkTrigger, setBookmarkTrigger] = useState(false);
   const [planToWatchTriggerTV, setPlanToWatchTriggerTV] = useState(false);
   const [bmrkTriggerTV, setBmrkTriggerTV] = useState(false);
   const movieArchives = useLiveQuery(
@@ -175,6 +183,8 @@ function Index() {
           planToWatchTriggerTV={planToWatchTriggerTV}
           setBookmarkTV={setBmrkTriggerTV}
           bookmarkTriggerTV={bmrkTriggerTV}
+          setBookmark={setBookmarkTrigger}
+          bookmarkTrigger={bookmarkTrigger}
         />
       </div>
     </div>
