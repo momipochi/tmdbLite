@@ -14,6 +14,7 @@ import {
 } from "@/components/ui/navigation-menu";
 import { cn } from "@/lib/utils";
 import React from "react";
+import { TVShowlistProvider } from "@/components/context/tvshowlist-provider";
 
 const movieComponents = [
   {
@@ -34,46 +35,48 @@ const tvComponents = [
 export const Route = createRootRoute({
   component: () => (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <ThemeSelect />
-      <div className="p-2 flex gap-2">
-        <NavigationMenu>
-          <NavigationMenuList>
-            <NavigationMenuItem>
-              <Link
-                to="/"
-                className={`[&.active]:font-bold ${navigationMenuTriggerStyle()}`}
-              >
-                Home
-              </Link>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>Movies</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                  {movieComponents.map((x) => (
-                    <ListItem key={x.title} title={x.title} href={x.href}>
-                      {x.description}
-                    </ListItem>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-            <NavigationMenuItem>
-              <NavigationMenuTrigger>TVShows</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
-                  {tvComponents.map((x) => (
-                    <ListItem key={x.title} title={x.title} href={x.href}>
-                      {x.description}
-                    </ListItem>
-                  ))}
-                </ul>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-          </NavigationMenuList>
-        </NavigationMenu>
-      </div>
-      <hr />
+      <TVShowlistProvider>
+        <ThemeSelect />
+        <div className="p-2 flex gap-2">
+          <NavigationMenu>
+            <NavigationMenuList>
+              <NavigationMenuItem>
+                <Link
+                  to="/"
+                  className={`[&.active]:font-bold ${navigationMenuTriggerStyle()}`}
+                >
+                  Home
+                </Link>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>Movies</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {movieComponents.map((x) => (
+                      <ListItem key={x.title} title={x.title} href={x.href}>
+                        {x.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+              <NavigationMenuItem>
+                <NavigationMenuTrigger>TVShows</NavigationMenuTrigger>
+                <NavigationMenuContent>
+                  <ul className="grid w-[400px] gap-3 p-4 md:w-[500px] md:grid-cols-2 lg:w-[600px]">
+                    {tvComponents.map((x) => (
+                      <ListItem key={x.title} title={x.title} href={x.href}>
+                        {x.description}
+                      </ListItem>
+                    ))}
+                  </ul>
+                </NavigationMenuContent>
+              </NavigationMenuItem>
+            </NavigationMenuList>
+          </NavigationMenu>
+        </div>
+        <hr />
+      </TVShowlistProvider>
       <Outlet />
       <TanStackRouterDevtools />
     </ThemeProvider>

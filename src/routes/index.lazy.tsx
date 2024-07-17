@@ -170,7 +170,7 @@ function Index() {
       </div>
       <div className="p-2 flex-row mb-12">
         <h2 className="text-left pb-2 w-full font-medium text-lg">
-          Planning to watch
+          Watch later
         </h2>
         <PlansToWatch
           tvArchives={tvArchives}
