@@ -37,7 +37,7 @@ const StyledLink: React.FC<{
     </Link>
   );
 };
-const PlansToWatch = ({
+const WatchLater = ({
   movieArchives,
   ptw,
   tvArchives,
@@ -172,7 +172,7 @@ function Index() {
         <h2 className="text-left pb-2 w-full font-medium text-lg">
           Watch later
         </h2>
-        <PlansToWatch
+        <WatchLater
           tvArchives={tvArchives}
           movieArchives={movieArchives}
           ptw={ptw}

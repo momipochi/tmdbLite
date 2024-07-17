@@ -1,20 +1,26 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useState, useEffect } from "react";
-import { getMovieList } from "../api/getMovieList";
 import { DiscoverPagination } from "../components/custom/discover-pagination";
-import { MovieList } from "../types/movieList";
-import { useLiveQuery } from "dexie-react-hooks";
-import { db } from "@/lib/indexedDB/db";
-import { cn, ToPTW } from "@/lib/utils";
+import { cn } from "@/lib/utils";
 import { SearchParam } from "@/types/pagesearchparam";
 import { MovieCard } from "@/components/custom/movieCard";
+import {
+  MovielistProvider,
+  useMovielistContext,
+} from "@/components/context/movielist-provider";
+import { MovieArchivesProvider } from "@/components/context/moviearchive-provider";
 
 export const Route = createFileRoute("/movies/nowplaying")({
   validateSearch: (search: Record<string, unknown>): SearchParam => ({
     page: Number(search?.page ?? 1),
   }),
 
-  component: () => <NowPlaying />,
+  component: () => (
+    <MovieArchivesProvider>
+      <MovielistProvider>
+        <NowPlaying />
+      </MovielistProvider>
+    </MovieArchivesProvider>
+  ),
 });
 
 const NowPlaying = () => {
@@ -23,22 +29,8 @@ const NowPlaying = () => {
   const setCurrentPage = (page: number) => {
     navigate({ search: () => ({ page }) });
   };
-  const [movies, setMovies] = useState<MovieList>();
-
-  useEffect(() => {
-    const tmp = async () => {
-      setMovies(await getMovieList(page));
-    };
-    tmp();
-  }, [page]);
-  const [bookmarkTrigger, setBookmarkTrigger] = useState(false);
-  const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
-
-  const movieArchives = useLiveQuery(
-    async () => ToPTW(await db.movieArchives.toArray()),
-    [planToWatchTrigger]
-  );
-  if (!movies) {
+  const mv = useMovielistContext(page, [page]);
+  if (!mv.movielist) {
     return <div>Loading...</div>;
   }
   return (
@@ -46,24 +38,28 @@ const NowPlaying = () => {
       <DiscoverPagination
         currentPage={page}
         setCurrentPage={setCurrentPage}
-        totalPages={movies.total_pages}
+        totalPages={mv.movielist.total_pages}
       />
       <div className={cn("grid-cols-5 grid gap-2")}>
-        {movies?.results.map((x) => (
+        {mv.movielist.results.map((x) => (
           <MovieCard
             key={x.id}
             watchlater={
-              movieArchives && movieArchives[x.id]?.watchlater === 1 ? 1 : 0
+              mv.movieArchiveMap && mv.movieArchiveMap[x.id]?.watchlater === 1
+                ? 1
+                : 0
             }
             bookmark={
-              movieArchives && movieArchives[x.id]?.bookmakred === 1 ? 1 : 0
+              mv.movieArchiveMap && mv.movieArchiveMap[x.id]?.bookmakred === 1
+                ? 1
+                : 0
             }
             arg={{
               movie: x,
-              setPlanToWatchTrigger,
-              planToWatchTrigger,
-              setBookmarkTrigger: setBookmarkTrigger,
-              bookmarkTrigger: bookmarkTrigger,
+              setPlanToWatchTrigger: mv.setWatchlaterTrigger,
+              planToWatchTrigger: mv.bookmarkTrigger,
+              setBookmarkTrigger: mv.setBookmarkTrigger,
+              bookmarkTrigger: mv.bookmarkTrigger,
             }}
           />
         ))}
@@ -71,7 +67,7 @@ const NowPlaying = () => {
       <DiscoverPagination
         currentPage={page}
         setCurrentPage={setCurrentPage}
-        totalPages={movies.total_pages}
+        totalPages={mv.movielist.total_pages}
       />
     </div>
   );

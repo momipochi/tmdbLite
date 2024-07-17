@@ -1,6 +1,5 @@
 import { getTVShowList } from "@/api/getTVShowList";
 import { PTWTVShow, ToPTWTVShows } from "@/lib/utils";
-import { MovieArchive } from "@/types/movieArchive";
 import { TVShowArchive } from "@/types/tvShowArchive";
 import { TVShowList } from "@/types/tvshowlist";
 import { createContext, useContext, useEffect, useState } from "react";
@@ -17,15 +16,6 @@ type TVArchiveState = {
   setPage: (page: number) => void;
 };
 
-type MovieArchiveState = {
-  movieArchives: MovieArchive[] | undefined;
-  movieArchiveMap: { [id: number]: MovieArchive | undefined } | undefined;
-  watchlaterTrigger: boolean;
-  setWatchlaterTrigger: (state: boolean) => void;
-  bookmarkTrigger: boolean;
-  setBookmarkTrigger: (state: boolean) => void;
-};
-
 const TVArchivesContextInitialState: TVArchiveState = {
   tvShowlist: { total_pages: 0, total_results: 0, page: 0, results: [] },
   tvArchiveMap: {},
@@ -39,19 +29,6 @@ const TVArchivesContextInitialState: TVArchiveState = {
 
 export const TVArchivesContext = createContext<TVArchiveState | undefined>(
   TVArchivesContextInitialState
-);
-
-const MovieArchivesContextInitialState: MovieArchiveState = {
-  movieArchives: [],
-  movieArchiveMap: {},
-  watchlaterTrigger: false,
-  setWatchlaterTrigger: () => {},
-  bookmarkTrigger: false,
-  setBookmarkTrigger: () => {},
-};
-
-export const MovieArchivesContext = createContext<MovieArchiveState>(
-  MovieArchivesContextInitialState
 );
 
 export const TVShowlistProvider = ({
