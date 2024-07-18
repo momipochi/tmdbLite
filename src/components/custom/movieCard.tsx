@@ -98,8 +98,8 @@ type SomeProps = {
 
 export const MovieCard = ({ arg, watchlater, bookmark }: SomeProps) => {
   return (
-    <Card key={arg.movie.id} className={cn("w-[230px] h-[430px]")}>
-      <CardContent className={cn("flex items-center justify-center pt-2")}>
+    <Card key={arg.movie.id} className={cn("w-[240px] h-[350px] p-2")}>
+      <CardContent className={cn("flex items-center justify-center pt-6")}>
         <img
           loading="lazy"
           src={`https://media.themoviedb.org/t/p/w220_and_h330_face${

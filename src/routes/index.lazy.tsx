@@ -88,7 +88,7 @@ const Some = ({
 
           <ScrollArea className="p whitespace-nowrap rounded-md border ">
             <TabsContent value="movies">
-              <ul className={cn("flex  space-x-4 p-4 h-[480px]")}>
+              <ul className={cn("flex  space-x-4 p-4 h-[400px]")}>
                 {!movieArchive || (movieArchive && movieArchive.length < 1) ? (
                   <figure className="m-auto">
                     <StyledLink
@@ -125,7 +125,7 @@ const Some = ({
               </ul>
             </TabsContent>
             <TabsContent value="shows">
-              <ul className={cn("flex  space-x-4 p-4 h-[480px]")}>
+              <ul className={cn("flex  space-x-4 p-4 h-[400px]")}>
                 {!tvArchive || (tvArchive && tvArchive.length < 1) ? (
                   <figure className="m-auto">
                     <StyledLink
