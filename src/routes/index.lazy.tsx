@@ -74,12 +74,6 @@ const Some = ({
   movieMap: PTW | undefined;
   section: string;
 }) => {
-  useEffect(() => {
-    console.log("Movie:", movieArchive);
-    console.log("Moviemap:", movieMap);
-    console.log("TV:", tvArchive);
-    console.log("TVmap:", tvMap);
-  }, [tvArchive, movieArchive, movieMap, tvMap]);
   return (
     <div className="p-2 flex-row mb-12">
       <h2 className="text-left pb-2 w-full font-medium text-lg">{section}</h2>
@@ -173,8 +167,6 @@ const Some = ({
 const IndexWrapper = () => {
   const tvArchiveContext = useTVArchiveContext();
   const movieArchiveContext = useMovieArchiveContext();
-  console.log(movieArchiveContext.movieArchive);
-  console.log(tvArchiveContext.tvArchive);
   const [ptw, setPtw] = useState(ToPTW(movieArchiveContext.movieArchive));
   const [ptwTV, setPtwTV] = useState(ToPTWTVShows(tvArchiveContext.tvArchive));
   useEffect(() => {
