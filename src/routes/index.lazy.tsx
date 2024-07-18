@@ -89,7 +89,9 @@ const Some = ({
           <ScrollArea className="p whitespace-nowrap rounded-md border ">
             <TabsContent value="movies">
               <ul className={cn("flex  space-x-4 p-4 h-[380px]")}>
-                {!movieArchive || (movieArchive && movieArchive.length < 1) ? (
+                {!movieArchive ||
+                (movieArchive &&
+                  movieArchive.filter(movieFilter).length < 1) ? (
                   <figure className="m-auto">
                     <StyledLink
                       to="/movies/nowplaying"
@@ -126,7 +128,8 @@ const Some = ({
             </TabsContent>
             <TabsContent value="shows">
               <ul className={cn("flex  space-x-4 p-4 h-[380px]")}>
-                {!tvArchive || (tvArchive && tvArchive.length < 1) ? (
+                {!tvArchive ||
+                (tvArchive && tvArchive.filter(tvFilter).length < 1) ? (
                   <figure className="m-auto">
                     <StyledLink
                       to="/tvshows/airingtoday"
