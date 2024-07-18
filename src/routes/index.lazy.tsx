@@ -1,16 +1,19 @@
 import { createLazyFileRoute, Link } from "@tanstack/react-router";
-import { useLiveQuery } from "dexie-react-hooks";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn, PTW, PTWTVShow, ToPTW, ToPTWTVShows } from "@/lib/utils";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import {
-  getWatchLaterMovieArchives,
-  getWatchLaterTVArchives,
-} from "@/lib/indexedDB/functions";
 import { MovieCard } from "@/components/custom/movieCard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { TVShowCard } from "@/components/custom/tvshowCard";
 import React from "react";
+import {
+  TVArchiveProvider,
+  useTVArchiveContext,
+} from "@/components/context/tvarchive-provider";
+import {
+  MovieArchivesProvider,
+  useMovieArchiveContext,
+} from "@/components/context/moviearchive-provider";
 import { MovieArchive } from "@/types/movieArchive";
 import { TVShowArchive } from "@/types/tvShowArchive";
 
@@ -37,129 +40,154 @@ const StyledLink: React.FC<{
     </Link>
   );
 };
-const WatchLater = ({
-  movieArchives,
-  ptw,
-  tvArchives,
-  ptwTV,
-  setPlanToWatchTrigger,
-  planToWatchTrigger,
-  setPlanToWatchTriggerTV,
-  planToWatchTriggerTV,
-  setBookmarkTV,
-  bookmarkTriggerTV,
-  setBookmark,
+
+const Some = ({
+  movieArchive,
+  tvArchive,
+  setWatchlaterTrigger,
+  watchlaterTrigger,
+  setBookmarkTrigger,
   bookmarkTrigger,
+  setWatchlaterTriggerTV,
+  watchlaterTriggerTV,
+  setBookmarkTriggerTV,
+  bookmarkTriggerTV,
+  tvMap,
+  movieMap,
+  section,
+  tvFilter,
+  movieFilter,
 }: {
-  movieArchives: MovieArchive[] | undefined;
-  ptw: PTW | undefined;
-  tvArchives: TVShowArchive[] | undefined;
-  ptwTV: PTWTVShow | undefined;
-  setPlanToWatchTrigger: (x: boolean) => void;
-  planToWatchTrigger: boolean;
-  setPlanToWatchTriggerTV: (x: boolean) => void;
-  planToWatchTriggerTV: boolean;
-  setBookmarkTV: (x: boolean) => void;
-  bookmarkTriggerTV: boolean;
-  setBookmark: (x: boolean) => void;
+  movieArchive: MovieArchive[] | undefined;
+  tvArchive: TVShowArchive[] | undefined;
+  tvFilter: (tv: TVShowArchive) => boolean;
+  movieFilter: (mv: MovieArchive) => boolean;
+  setWatchlaterTrigger: (trigger: boolean) => void;
+  watchlaterTrigger: boolean;
+  setBookmarkTrigger: (trigger: boolean) => void;
   bookmarkTrigger: boolean;
+  setWatchlaterTriggerTV: (trigger: boolean) => void;
+  watchlaterTriggerTV: boolean;
+  setBookmarkTriggerTV: (trigger: boolean) => void;
+  bookmarkTriggerTV: boolean;
+  tvMap: PTWTVShow | undefined;
+  movieMap: PTW | undefined;
+  section: string;
 }) => {
+  useEffect(() => {
+    console.log("Movie:", movieArchive);
+    console.log("Moviemap:", movieMap);
+    console.log("TV:", tvArchive);
+    console.log("TVmap:", tvMap);
+  }, [tvArchive, movieArchive, movieMap, tvMap]);
   return (
-    <div className="justify-start content-center">
-      <Tabs defaultValue="movies">
-        <div className="flex mb-2">
-          <TabsList>
-            <TabsTrigger value="movies">Movies</TabsTrigger>
-            <TabsTrigger value="shows">Shows</TabsTrigger>
-          </TabsList>
-        </div>
+    <div className="p-2 flex-row mb-12">
+      <h2 className="text-left pb-2 w-full font-medium text-lg">{section}</h2>
+      <div className="justify-start content-center">
+        <Tabs defaultValue="movies">
+          <div className="flex mb-2">
+            <TabsList>
+              <TabsTrigger value="movies">Movies</TabsTrigger>
+              <TabsTrigger value="shows">Shows</TabsTrigger>
+            </TabsList>
+          </div>
 
-        <ScrollArea className="p-4 whitespace-nowrap rounded-md border ">
-          <TabsContent value="movies">
-            <ul className={cn("flex  space-x-4 p-4 h-[580px]")}>
-              {!movieArchives || (movieArchives && movieArchives.length < 1) ? (
-                <figure className="m-auto">
-                  <StyledLink
-                    to="/movies/nowplaying"
-                    search={{ page: 1 }}
-                    text="Discover movies!"
-                  />
-                </figure>
-              ) : (
-                movieArchives?.map((x) => (
-                  <figure key={x.id} className="mt-auto mb-auto">
-                    <MovieCard
-                      watchlater={
-                        ptw && ptw[x.movie.id]?.watchlater === 1 ? 1 : 0
-                      }
-                      bookmark={ptw && ptw[x.id]?.bookmakred === 1 ? 1 : 0}
-                      arg={{
-                        movie: x.movie,
-                        setPlanToWatchTrigger,
-                        planToWatchTrigger,
-                        setBookmarkTrigger: setBookmark,
-                        bookmarkTrigger: bookmarkTrigger,
-                      }}
+          <ScrollArea className="p-4 whitespace-nowrap rounded-md border ">
+            <TabsContent value="movies">
+              <ul className={cn("flex  space-x-4 p-4 h-[580px]")}>
+                {!movieArchive || (movieArchive && movieArchive.length < 1) ? (
+                  <figure className="m-auto">
+                    <StyledLink
+                      to="/movies/nowplaying"
+                      search={{ page: 1 }}
+                      text="Discover movies!"
                     />
                   </figure>
-                ))
-              )}
-            </ul>
-          </TabsContent>
-          <TabsContent value="shows">
-            <ul className={cn("flex  space-x-4 p-4 h-[580px]")}>
-              {!tvArchives || (tvArchives && tvArchives.length < 1) ? (
-                <figure className="m-auto">
-                  <StyledLink
-                    to="/tvshows/airingtoday"
-                    search={{ page: 1 }}
-                    text="Discover tvshows!"
-                  />
-                </figure>
-              ) : (
-                tvArchives?.map((x) => (
-                  <figure key={x.id} className="mt-auto mb-auto">
-                    <TVShowCard
-                      watchlater={
-                        ptwTV && ptwTV[x.tvshow.id]?.watchlater === 1 ? 1 : 0
-                      }
-                      bookmark={
-                        ptwTV && ptwTV[x.tvshow.id]?.bookmakred === 1 ? 1 : 0
-                      }
-                      tvshow={x.tvshow}
-                      setPlanToWatchTrigger={setPlanToWatchTriggerTV}
-                      planToWatchTrigger={planToWatchTriggerTV}
-                      setBookmarkTrigger={setBookmarkTV}
-                      bookmarkTrigger={bookmarkTriggerTV}
+                ) : (
+                  movieArchive?.filter(movieFilter).map((x) => (
+                    <figure key={x.id} className="mt-auto mb-auto">
+                      <MovieCard
+                        watchlater={
+                          movieMap && movieMap[x.movie.id]?.watchlater === 1
+                            ? 1
+                            : 0
+                        }
+                        bookmark={
+                          movieMap && movieMap[x.movie.id]?.bookmakred === 1
+                            ? 1
+                            : 0
+                        }
+                        arg={{
+                          movie: x.movie,
+                          setPlanToWatchTrigger: setWatchlaterTrigger,
+                          planToWatchTrigger: watchlaterTrigger,
+                          setBookmarkTrigger: setBookmarkTrigger,
+                          bookmarkTrigger: bookmarkTrigger,
+                        }}
+                      />
+                    </figure>
+                  ))
+                )}
+              </ul>
+            </TabsContent>
+            <TabsContent value="shows">
+              <ul className={cn("flex  space-x-4 p-4 h-[580px]")}>
+                {!tvArchive || (tvArchive && tvArchive.length < 1) ? (
+                  <figure className="m-auto">
+                    <StyledLink
+                      to="/tvshows/airingtoday"
+                      search={{ page: 1 }}
+                      text="Discover tvshows!"
                     />
                   </figure>
-                ))
-              )}
-            </ul>
-          </TabsContent>
+                ) : (
+                  tvArchive?.filter(tvFilter).map((x) => (
+                    <figure key={x.id} className="mt-auto mb-auto">
+                      <TVShowCard
+                        watchlater={
+                          tvMap && tvMap[x.tvshow.id]?.watchlater === 1 ? 1 : 0
+                        }
+                        bookmark={
+                          tvMap && tvMap[x.tvshow.id]?.bookmakred === 1 ? 1 : 0
+                        }
+                        tvshow={x.tvshow}
+                        setPlanToWatchTrigger={setWatchlaterTriggerTV}
+                        planToWatchTrigger={watchlaterTriggerTV}
+                        setBookmarkTrigger={setBookmarkTriggerTV}
+                        bookmarkTrigger={bookmarkTriggerTV}
+                      />
+                    </figure>
+                  ))
+                )}
+              </ul>
+            </TabsContent>
 
-          <ScrollBar orientation="horizontal" />
-        </ScrollArea>
-      </Tabs>
+            <ScrollBar orientation="horizontal" />
+          </ScrollArea>
+        </Tabs>
+      </div>
     </div>
   );
 };
-function Index() {
-  const [planToWatchTrigger, setPlanToWatchTrigger] = useState(false);
-  const [bookmarkTrigger, setBookmarkTrigger] = useState(false);
-  const [planToWatchTriggerTV, setPlanToWatchTriggerTV] = useState(false);
-  const [bmrkTriggerTV, setBmrkTriggerTV] = useState(false);
-  const movieArchives = useLiveQuery(
-    async () => await getWatchLaterMovieArchives(),
-    [planToWatchTrigger]
-  );
-  const tvArchives = useLiveQuery(
-    async () => await getWatchLaterTVArchives(),
-    [planToWatchTriggerTV, bmrkTriggerTV]
-  );
-  const ptw = ToPTW(movieArchives);
-  const ptwTV = ToPTWTVShows(tvArchives);
 
+const IndexWrapper = () => {
+  const tvArchiveContext = useTVArchiveContext();
+  const movieArchiveContext = useMovieArchiveContext();
+  console.log(movieArchiveContext.movieArchive);
+  console.log(tvArchiveContext.tvArchive);
+  const [ptw, setPtw] = useState(ToPTW(movieArchiveContext.movieArchive));
+  const [ptwTV, setPtwTV] = useState(ToPTWTVShows(tvArchiveContext.tvArchive));
+  useEffect(() => {
+    setPtw(ToPTW(movieArchiveContext.movieArchive));
+    setPtwTV(ToPTWTVShows(tvArchiveContext.tvArchive));
+  }, [
+    movieArchiveContext.movieArchive,
+    tvArchiveContext.tvArchive,
+    movieArchiveContext.bookmarkTrigger,
+    movieArchiveContext.watchlaterTrigger,
+    tvArchiveContext.bookmarkTrigger,
+    tvArchiveContext.watchlaterTrigger,
+  ]);
   return (
     <div className="p-2 flex-row items-start justify-start">
       <div className="p-2 flex-row items-start justify-start">
@@ -167,26 +195,50 @@ function Index() {
           Welcome to TMDBLite, a personal movie and TV show tracker. Discover,
           bookmark, and rate contents — all stored locally in the browser.
         </h1>
-      </div>
-      <div className="p-2 flex-row mb-12">
-        <h2 className="text-left pb-2 w-full font-medium text-lg">
-          Watch later
-        </h2>
-        <WatchLater
-          tvArchives={tvArchives}
-          movieArchives={movieArchives}
-          ptw={ptw}
-          ptwTV={ptwTV}
-          setPlanToWatchTrigger={setPlanToWatchTrigger}
-          setPlanToWatchTriggerTV={setPlanToWatchTriggerTV}
-          planToWatchTrigger={planToWatchTrigger}
-          planToWatchTriggerTV={planToWatchTriggerTV}
-          setBookmarkTV={setBmrkTriggerTV}
-          bookmarkTriggerTV={bmrkTriggerTV}
-          setBookmark={setBookmarkTrigger}
-          bookmarkTrigger={bookmarkTrigger}
+        <Some
+          tvArchive={tvArchiveContext.tvArchive}
+          movieArchive={movieArchiveContext.movieArchive}
+          tvFilter={(x) => x.watchlater === 1}
+          movieFilter={(x) => x.watchlater === 1}
+          tvMap={ptwTV}
+          movieMap={ptw}
+          setBookmarkTrigger={movieArchiveContext.setBookmarkTrigger}
+          bookmarkTrigger={movieArchiveContext.bookmarkTrigger}
+          setWatchlaterTrigger={movieArchiveContext.setWatchlaterTrigger}
+          watchlaterTrigger={movieArchiveContext.watchlaterTrigger}
+          setBookmarkTriggerTV={tvArchiveContext.setBookmarkTrigger}
+          bookmarkTriggerTV={tvArchiveContext.bookmarkTrigger}
+          setWatchlaterTriggerTV={tvArchiveContext.setWatchlaterTrigger}
+          watchlaterTriggerTV={tvArchiveContext.watchlaterTrigger}
+          section="Water later"
+        />
+        <Some
+          tvArchive={tvArchiveContext.tvArchive}
+          movieArchive={movieArchiveContext.movieArchive}
+          tvFilter={(x) => x.bookmakred === 1}
+          movieFilter={(x) => x.bookmakred === 1}
+          tvMap={ptwTV}
+          movieMap={ptw}
+          setBookmarkTrigger={movieArchiveContext.setBookmarkTrigger}
+          bookmarkTrigger={movieArchiveContext.bookmarkTrigger}
+          setWatchlaterTrigger={movieArchiveContext.setWatchlaterTrigger}
+          watchlaterTrigger={movieArchiveContext.watchlaterTrigger}
+          setBookmarkTriggerTV={tvArchiveContext.setBookmarkTrigger}
+          bookmarkTriggerTV={tvArchiveContext.bookmarkTrigger}
+          setWatchlaterTriggerTV={tvArchiveContext.setWatchlaterTrigger}
+          watchlaterTriggerTV={tvArchiveContext.watchlaterTrigger}
+          section="Bookmarked"
         />
       </div>
     </div>
+  );
+};
+function Index() {
+  return (
+    <TVArchiveProvider>
+      <MovieArchivesProvider>
+        <IndexWrapper />
+      </MovieArchivesProvider>
+    </TVArchiveProvider>
   );
 }
