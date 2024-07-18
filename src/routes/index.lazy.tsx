@@ -88,7 +88,7 @@ const Some = ({
 
           <ScrollArea className="p whitespace-nowrap rounded-md border ">
             <TabsContent value="movies">
-              <ul className={cn("flex  space-x-4 p-4 h-[400px]")}>
+              <ul className={cn("flex  space-x-4 p-4 h-[380px]")}>
                 {!movieArchive || (movieArchive && movieArchive.length < 1) ? (
                   <figure className="m-auto">
                     <StyledLink
@@ -125,7 +125,7 @@ const Some = ({
               </ul>
             </TabsContent>
             <TabsContent value="shows">
-              <ul className={cn("flex  space-x-4 p-4 h-[400px]")}>
+              <ul className={cn("flex  space-x-4 p-4 h-[380px]")}>
                 {!tvArchive || (tvArchive && tvArchive.length < 1) ? (
                   <figure className="m-auto">
                     <StyledLink
@@ -183,7 +183,7 @@ const IndexWrapper = () => {
   return (
     <div className="p-2 flex-row items-start justify-start">
       <div className="p-2 flex-row items-start justify-start">
-        <h1 className="text-left pb-8 w-full font-medium text-5xl">
+        <h1 className="text-left pb-8 w-full font-medium text-3xl">
           Welcome to TMDBLite, a personal movie and TV show tracker. Discover,
           bookmark, and rate contents — all stored locally in the browser.
         </h1>
