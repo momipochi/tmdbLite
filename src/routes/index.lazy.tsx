@@ -125,7 +125,7 @@ const Some = ({
               </ul>
             </TabsContent>
             <TabsContent value="shows">
-              <ul className={cn("flex  space-x-4 p-4 h-[580px]")}>
+              <ul className={cn("flex  space-x-4 p-4 h-[480px]")}>
                 {!tvArchive || (tvArchive && tvArchive.length < 1) ? (
                   <figure className="m-auto">
                     <StyledLink
