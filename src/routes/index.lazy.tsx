@@ -75,7 +75,7 @@ const Some = ({
   section: string;
 }) => {
   return (
-    <div className="p-2 flex-row mb-12">
+    <div className="p-2 flex-row mb-2">
       <h2 className="text-left pb-2 w-full font-medium text-lg">{section}</h2>
       <div className="justify-start content-center">
         <Tabs defaultValue="movies">
@@ -86,9 +86,9 @@ const Some = ({
             </TabsList>
           </div>
 
-          <ScrollArea className="p-4 whitespace-nowrap rounded-md border ">
+          <ScrollArea className="p whitespace-nowrap rounded-md border ">
             <TabsContent value="movies">
-              <ul className={cn("flex  space-x-4 p-4 h-[580px]")}>
+              <ul className={cn("flex  space-x-4 p-4 h-[480px]")}>
                 {!movieArchive || (movieArchive && movieArchive.length < 1) ? (
                   <figure className="m-auto">
                     <StyledLink
