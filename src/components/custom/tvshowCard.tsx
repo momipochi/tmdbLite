@@ -105,7 +105,7 @@ export const TVShowCard = ({
   bookmarkTrigger,
 }: TVShowCardProp) => {
   return (
-    <Card key={tvshow.id} className={cn("w-[230px] h-[350px] p-2")}>
+    <Card key={tvshow.id} className={cn("w-[230px] max-h-[450px] p-2")}>
       <CardContent className={cn("flex items-center justify-center pt-6")}>
         <img
           loading="lazy"

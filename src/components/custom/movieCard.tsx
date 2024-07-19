@@ -98,7 +98,7 @@ type SomeProps = {
 
 export const MovieCard = ({ arg, watchlater, bookmark }: SomeProps) => {
   return (
-    <Card key={arg.movie.id} className={cn("w-[240px] h-[350px] p-2")}>
+    <Card key={arg.movie.id} className={cn("w-[240px] max-h-[450px] p-2")}>
       <CardContent className={cn("flex items-center justify-center pt-6")}>
         <img
           loading="lazy"
