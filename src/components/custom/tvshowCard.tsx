@@ -105,10 +105,15 @@ export const TVShowCard = ({
   bookmarkTrigger,
 }: TVShowCardProp) => {
   return (
-    <Card key={tvshow.id} className={cn("w-[230px] max-h-[450px] p-2")}>
+    <Card
+      key={tvshow.id}
+      className={cn("w-[230px] min-h-[380px] max-h-[480px] p-2")}
+    >
       <CardContent className={cn("flex items-center justify-center pt-6")}>
         <img
           loading="lazy"
+          width="160px"
+          height="240px"
           src={`https://media.themoviedb.org/t/p/w220_and_h330_face${
             tvshow.poster_path ? tvshow.poster_path : tvshow.backdrop_path
           }`}

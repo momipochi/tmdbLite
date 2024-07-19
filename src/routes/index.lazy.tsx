@@ -86,9 +86,11 @@ const Some = ({
             </TabsList>
           </div>
 
-          <ScrollArea className="p whitespace-nowrap rounded-md border ">
-            <TabsContent value="movies">
-              <ul className={cn("flex  space-x-4 p-4 h-[380px]")}>
+          <ScrollArea className="p whitespace-nowrap rounded-md border">
+            <TabsContent value="movies" className="m-0">
+              <ul
+                className={cn("flex space-x-4 p-4 min-h-[30vh] max-h-[50vh]")}
+              >
                 {!movieArchive ||
                 (movieArchive &&
                   movieArchive.filter(movieFilter).length < 1) ? (
@@ -126,8 +128,10 @@ const Some = ({
                 )}
               </ul>
             </TabsContent>
-            <TabsContent value="shows">
-              <ul className={cn("flex  space-x-4 p-4 h-[380px]")}>
+            <TabsContent value="shows" className="m-0">
+              <ul
+                className={cn("flex  space-x-4 p-4 min-h-[30vh] max-h-[50vh]")}
+              >
                 {!tvArchive ||
                 (tvArchive && tvArchive.filter(tvFilter).length < 1) ? (
                   <figure className="m-auto">
