@@ -89,7 +89,7 @@ const Some = ({
           <ScrollArea className="p whitespace-nowrap rounded-md border">
             <TabsContent value="movies" className="m-0">
               <ul
-                className={cn("flex space-x-4 p-4 min-h-[30vh] max-h-[50vh]")}
+                className={cn("flex space-x-4 p-4 min-h-[32vh] max-h-[50vh]")}
               >
                 {!movieArchive ||
                 (movieArchive &&
@@ -130,7 +130,7 @@ const Some = ({
             </TabsContent>
             <TabsContent value="shows" className="m-0">
               <ul
-                className={cn("flex  space-x-4 p-4 min-h-[30vh] max-h-[50vh]")}
+                className={cn("flex  space-x-4 p-4 min-h-[32vh] max-h-[50vh]")}
               >
                 {!tvArchive ||
                 (tvArchive && tvArchive.filter(tvFilter).length < 1) ? (
